@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { TableComponent } from './table/table.component';
 import { HeroDetailComponent } from './hero-detail/hero-detail.component';
 import { RouterModule } from '../../node_modules/@angular/router';
+import { heroService } from './table/hero.service';
 
 
 @NgModule({
@@ -19,7 +20,7 @@ import { RouterModule } from '../../node_modules/@angular/router';
     BrowserModule,
     RouterModule.forRoot(ROUTES)
   ],
-  providers: [],
+  providers: [heroService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

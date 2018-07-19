@@ -9,11 +9,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>1009664</td>
-        <td><a [routerLink]="['/hero-detail']">Thor</a></td>
-        <td>As the Norse God of thunder and lightning, Thor wields one of the greatest weapons ever made, the enchanted hammer Mjolnir. While others have described Thor as an over-muscled, oafish imbecile, he's quite smart and compassionate.  He's self-assured, and he would never, ever stop fighting for a worthwhile cause</td>
-        <td>2016-01-05T12:33:20-0500</td>
+      <tr *ngFor="let hero of heroes">
+        <td>{{hero.id}}</td>
+        <td><a [routerLink]="['/hero-detail']">{{hero.name}}</a></td>
+        <td>{{hero.description}}</td>
+        <td>{{hero.modified}}</td>
       </tr>
     </tbody>
   </table>
