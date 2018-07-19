@@ -1,16 +1,23 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { ROUTES } from './app.routes';
 
 
 import { AppComponent } from './app.component';
+import { TableComponent } from './table/table.component';
+import { HeroDetailComponent } from './hero-detail/hero-detail.component';
+import { RouterModule } from '../../node_modules/@angular/router';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TableComponent,
+    HeroDetailComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    RouterModule.forRoot(ROUTES)
   ],
   providers: [],
   bootstrap: [AppComponent]
