@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let hero of heroes">
+      <tr *ngFor="let hero of this.heroService.getHeroes() | async">
         <td>{{hero.id}}</td>
         <td><a [routerLink]="['/hero-detail']">{{hero.name}}</a></td>
         <td>{{hero.description}}</td>

@@ -21,7 +21,9 @@ export class TableComponent implements OnInit {
   ngOnInit() {
     //assignando a minha propriedade componente com o meu método que me
     //retorna uma lista de herois
-    this.heroes = this.heroService.getHeroes();
+    this.heroService.getHeroes().then(heroes => {
+      this.heroes = heroes;
+    });
   }
 
 }

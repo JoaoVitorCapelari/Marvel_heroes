@@ -20,8 +20,8 @@ export class heroService {
 ]
 
     //metodo que vai me retornar um array de herois
-    getHeroes(): Hero[] {
-        return this.heroes;
+    getHeroes(): Promise<Hero[]> {
+        return Promise.resolve(this.heroes);
     } 
 
 }
@@ -32,3 +32,14 @@ export class heroService {
   //componente e componentes filhos ..... providers:[], só vai ser compartilhado pelo componente e seus filhos mesmo se existir um identico em um módulo
   //view providers de um componente ..... viewProviders:[], componentes filhos não terão acesso, somente o componente
 //@Injectable() receber injeções do framework, exemplos: title, http e router
+
+//programação Reativa 'Reactive Programming'
+// - quando um vento acontece, os que estão interessados são notificados e reagem a ele
+// - ideia baseada no padrão Observer: onde tem um obejto que é o foco do interesse e outros objetos
+// interessados nele que são os listeners(que se inscrevem esperando um evento), quando acontece um evento ele executa uma ação
+// os eventos vem em forma de stream, cada evento que acontece gera uma notificação aos objetos interessados
+// a stream é consumida item a item até que se chegue ao fim e não existam mais objetos
+// iterator + observer
+// RXJS, o objeto principal é Observable
+// Observables continuam disparando eventos até que sejam explicitamente fechados => Múltiplos Eventos
+// Promises são consideradas resolvidas depois do primeiro evento
