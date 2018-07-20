@@ -22,7 +22,7 @@ export class heroService {
     //metodo que vai me retornar um array de herois
     getHeroes(): Promise<Hero[]> {
         return Promise.resolve(this.heroes);
-    } 
+}
 
 }
 
