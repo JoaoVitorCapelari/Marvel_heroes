@@ -14,16 +14,18 @@ export class TableComponent implements OnInit {
   @Input() hero: Hero
 
   heroes: Hero[];
+  //declarado aqui para usar o AsyncPipe
+  heroServices = this.heroService.getHeroes();
 
   //passando para o meu construtor inicializar o serviço
   constructor(private heroService: heroService) {}
 
   ngOnInit() {
-     //assignando a minha propriedade componente com o meu método que me
-    //retorna uma lista de herois 
-    this.heroService.getHeroes().then(heroes => {
-      this.heroes = heroes;
-    });
+    //assignando a minha propriedade componente com o meu método que me retorna a lista de herois e uma promessa
+
+    /* this.heroService.getHeroes().then(heroes => {
+       this.heroes = heroes;
+     }); */
   }
 
 }
