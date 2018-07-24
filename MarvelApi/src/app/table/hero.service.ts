@@ -1,29 +1,49 @@
 import { Hero } from "./hero.model";
+import { MARVEL_API } from "../app.api";
+import { Injectable } from "@angular/core";
+import { Http } from "@angular/http";
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/operator/map';
 
+//para uma classe de serviço receber um outro serviço via injeção de dependencia precisa marca-la com o decorator @injectable
+@Injectable()
 export class heroService {
 
-    constructor(){}
+    constructor(private http: Http){}
 
-    heroes: Hero[] = [
-        {
-          id: 1009664,
-          name: "Thor",
-          description: "As the Norse God of thunder and lightning, Thor wields one of the greatest weapons ever made, the enchanted hammer Mjolnir. While others have described Thor as an over-muscled, oafish imbecile, he's quite smart and compassionate.  He's self-assured, and he would never, ever stop fighting for a worthwhile cause.",
-          modified: "2016-01-05T12:33:20-0500",
-        },
-        {
-          id: 1009261,
-          name: "Carol Danvers",
-          description: "",
-          modified: "2012-06-06T15:38:57-0400",
-        }
-]
+
+
+    // INFORMAÇÃO MOCKADA    
+//     heroes: Hero[] = [
+//         {
+//           id: 1009664,
+//           name: "Thor",
+//           description: "As the Norse God of thunder and lightning, Thor wields one of the greatest weapons ever made, the enchanted hammer Mjolnir. While others have described Thor as an over-muscled, oafish imbecile, he's quite smart and compassionate.  He's self-assured, and he would never, ever stop fighting for a worthwhile cause.",
+//           modified: "2016-01-05T12:33:20-0500",
+//         },
+//         {
+//           id: 1009261,
+//           name: "Carol Danvers",
+//           description: "",
+//           modified: "2012-06-06T15:38:57-0400",
+//         }
+// ]
 
     //metodo que vai me retornar um array de herois
-    getHeroes(): Promise<Hero[]> {
-        return Promise.resolve(this.heroes);
-}
+//     getHeroes(): Promise<Hero[]> {
+//         return Promise.resolve(this.heroes);
+// }
 
+       getHeroes(): Observable<Hero[]> {
+           //utilizando o serviço http com get
+           //o tipo Observable response não é compativel com o tipo response array de Hero, por isso precisamos mapear e converter para o tipo json, utilizando o operador map
+           //toda requisição feita vai retornar observable response que representa a resposta crua, mas nós só precisamos do obejto json
+           return this.http.get(`${MARVEL_API}` + this.tsRandom(0.1, 1)).map(response => response.json())
+       }
+
+       tsRandom(min: number, max: number) {
+        return Math.random() * (max - min) + min;
+    }
 }
 
 //usado para encapsular o acesso a API de back-end
