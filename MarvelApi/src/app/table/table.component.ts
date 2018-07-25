@@ -9,23 +9,28 @@ import { heroService } from './hero.service';
 })
 export class TableComponent implements OnInit {
 
-  //propriedade chamada hero do tipo Hero que é meu model que representa o dado do tipo hero, segundo a API.
-  //decorator @Input permite com que outros componentes possam passar o meu hero para o componente hero-detail e assim poder exibir os dados daquele herói
-  @Input() hero: Hero
+  // propriedade chamada hero do tipo Hero que é meu model que representa o dado do tipo hero, segundo a API.
+  // decorator @Input permite com que outros componentes possam passar o meu hero para
+  // o componente hero-detail e assim poder exibir os dados daquele herói
+  @Input() hero: Hero;
 
   heroes: Hero[];
-  //declarado aqui para usar o AsyncPipe
-  heroServices = this.heroService.getHeroes();
+  // declarado aqui para usar o AsyncPipe que no html seria this.heroServices | async
+  // heroServices = this.heroService.getHeroes();
 
-  //passando para o meu construtor inicializar o serviço
+  // passando para o meu construtor inicializar o serviço
   constructor(private heroService: heroService) {}
 
   ngOnInit() {
-    //assignando a minha propriedade componente com o meu método que me retorna a lista de herois e uma promessa
+    // assignando a minha propriedade componente com o meu método que me retorna a lista de herois e uma promessa
 
     /* this.heroService.getHeroes().then(heroes => {
        this.heroes = heroes;
      }); */
+
+     this.heroService.getHeroes()
+      .subscribe(heroes => this.heroes = heroes);
+
   }
 
 }
