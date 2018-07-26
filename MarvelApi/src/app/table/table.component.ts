@@ -32,9 +32,7 @@ export class TableComponent implements OnInit {
      this.heroService.getHeroes()
       .subscribe(data => {
         this.heroes = data;
-        console.log(data);
-      });
-      console.log(this.heroes);
+      }, error => {console.log(error)});
     }
 }
 

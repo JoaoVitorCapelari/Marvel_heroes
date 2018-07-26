@@ -2,11 +2,11 @@ import { Hero } from "./hero.model";
 import { MARVEL_API } from "../app.api";
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
-import { Observable } from 'rxjs/observable';
-import { _throw } from 'rxjs/observable/throw';
-import { catchError } from 'rxjs/operators';
-import 'rxjs/add/operator/map';
 import { HttpErrorResponse } from '@angular/common/http';
+
+import { Observable } from 'rxjs/observable';
+import { tap } from 'rxjs/operators';
+import 'rxjs/add/operator/map';
 
 
 /* para uma classe de serviço receber um outro serviço via injeção de dependencia precisa marca-la com o decorator @injectable */
@@ -26,33 +26,20 @@ export class heroService {
             o tipo Observable response não é compativel com o tipo response array de Hero, por isso preciso
             mapear e converter para o tipo json, utilizando o operador map, toda requisição feita vai retornar 
             um tipo response que representa a resposta crua, mas preciso do obejto json.
-            A chamada http ainda não foi feita, vai ser feita quando eu fizer o subscribe no componente */
+            A chamada http ainda não foi feita, vai ser feita quando eu fizer o subscribe no componente 
+            pipe(tap( x => console.log(x))) funciona como um subscribe, mas ele não completa, somente simula uma subscription  */
            return this.http.get(MARVEL_API)
-               .map(response => response.json().data.results as Hero[]).pipe(
-                   catchError(this.handleError)
-               );
-       }
+               .map(response => response.json().data.results as Hero[])
+               .pipe(
+                   tap(x => console.log(x))
+                );
+            }
 
      /* gera um timestamp aleatório entre um min e um máximo  */
      
      //  tsRandom(min: number, max: number) {
      //   return Math.random() * (max - min) + min;
      //  } 
-
-    /*================== 
-    tratamento de erro 
-    ===================*/
-    private handleError(error: HttpErrorResponse) {
-        if (error.error instanceof ErrorEvent) {
-            console.error('An error occurred:', error.error.message);
-        } else {
-            console.error(
-                `Backend returned code ${error.status}, ` +
-                `body was: ${error.error}`);
-        }
-        return _throw(
-            'Something bad happened; please try again later.');
-    };
 }
 
 /* serviço é usado para encapsular o acesso a API de back-end
