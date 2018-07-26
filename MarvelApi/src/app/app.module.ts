@@ -8,7 +8,7 @@ import { TableComponent } from './table/table.component';
 import { HeroDetailComponent } from './hero-detail/hero-detail.component';
 import { RouterModule } from '../../node_modules/@angular/router';
 import { heroService } from './table/hero.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 
 
 @NgModule({
@@ -20,7 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     RouterModule.forRoot(ROUTES),
-    HttpClientModule
+    HttpModule
   ],
   providers: [heroService],
   bootstrap: [AppComponent]
