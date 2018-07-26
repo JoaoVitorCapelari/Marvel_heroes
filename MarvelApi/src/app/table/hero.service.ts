@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/observable';
 import { _throw } from 'rxjs/observable/throw';
 import { catchError } from 'rxjs/operators';
 import 'rxjs/add/operator/map';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { RequestOptions} from '@angular/http';
 
 
@@ -50,7 +50,7 @@ export class heroService {
            // mapear e converter para o tipo json, utilizando o operador map
            // toda requisição feita vai retornar um tipo response que representa a resposta crua, mas nós só precisamos do obejto json
            // a chamada http ainda não foi feita, vai ser feita quando eu fizer o subscribe no componente
-           return this.http.get(`${MARVEL_API}`, options)
+           return this.http.get(MARVEL_API)
                .map(response => response.json()).pipe(
                    catchError(this.handleError)
                );;
@@ -61,7 +61,7 @@ export class heroService {
         return Math.random() * (max - min) + min;
     } */
 
-    // tartamento de erro 
+    // tratamento de erro 
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.
