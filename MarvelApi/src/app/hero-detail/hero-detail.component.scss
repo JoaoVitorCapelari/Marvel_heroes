@@ -1,0 +1,21 @@
+.info-image {
+    padding: 20px;
+    .heroImage {
+        padding: 10px;
+        .card {
+            height: auto;
+            width: 250px;
+            .lastModified {
+                font-size: 12px;
+                font-style: italic;
+            }
+        }
+    }
+}
+
+.hero-detail {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}

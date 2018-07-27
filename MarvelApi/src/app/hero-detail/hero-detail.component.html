@@ -1,3 +1,40 @@
-<div>
-    <p>{{hero.name}}</p>
+<section class="hero is-info">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        {{hero?.name}}
+      </h1>
+      <h2 class="subtitle">
+        <span>appeared in {{hero?.comics.available}} comics</span>
+      </h2>
+    </div>
+  </div>
+</section>
+
+<div class="container info-image hero-detail" *ngIf="hero">
+  <div class="heroImage">
+    <div class="card">
+      <div class="card-image">
+        <figure>
+          <img src="{{ hero?.thumbnail.path +'/standard_fantastic.'+ hero?.thumbnail.extension }}" alt="{{hero?.name+''+'image'}}">
+        </figure>
+      </div>
+      <div class="card-content">
+        <p class="title is-4">{{hero?.name}}</p>
+        <div class="content" *ngIf="hero?.description === '' ">
+         <p>Apparently this hero is not important enough to have a description.</p>
+        </div>
+        <div class="content" *ngIf="hero?.description !== '' ">    
+          {{hero?.description}}
+          <br>
+        </div>
+        <span class="lastModified">Last modified at: {{hero?.modified}}</span>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+<!-- O interrogação '?' depois do nome da propriedade é um operador de navegação segura. A minha propriedade 'hero' é undefined no momento da criação do meu componente
+ela só será preenchida quando o meu método 'onInit' for chamado e o método 'subscribe' for chamado, ai sim o observable faz a chamada 'http', que pode demorar e ai sim 
+vou obter o valor, mas nesse momento o meu objeto é undefined -->

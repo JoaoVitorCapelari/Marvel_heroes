@@ -1,5 +1,5 @@
 import { Hero } from "./hero.model";
-import { MARVEL_API } from "../app.api";
+import { MARVEL_API, MARVEL_API_HERO, apiKeyHashTs } from "../app.api";
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
 import { ErrorHandler } from "../app.error-handler";
@@ -23,21 +23,30 @@ export class heroService {
      //  return Promise.resolve(this.heroes);
      //}
 
-       getHeroes(id?): Observable<Hero[]> { 
+       getHeroes(): Observable<Hero[]> { 
             /*Utilizando o serviço http com get
             o tipo Observable response não é compativel com o tipo response array de Hero, por isso preciso
             mapear e converter para o tipo json, utilizando o operador map, toda requisição feita vai retornar 
             um tipo response que representa a resposta crua, mas preciso do obejto json.
             A chamada http ainda não foi feita, vai ser feita quando eu fizer o subscribe no componente 
-            pipe(tap( x => console.log(x))) funciona como um subscribe, mas ele não completa, somente simula uma subscription  */
+            pipe(tap( x => console.log(x))) funciona como um subscribe, mas ele não completa, somente simula uma subscription  
+            Operador catch serve para tratamento de erro, que está em outra classe/arquivo */
            return this.http.get(MARVEL_API)
                .map(response => response.json().data.results as Hero[])
                .catch(ErrorHandler.handleError)
                .pipe(
                    tap(x => console.log(x))
                 );
-                
             }
+
+        getHeroById(id: number): Observable<Hero>{
+            return this.http.get(`${MARVEL_API_HERO}/${id}${apiKeyHashTs}`)
+                            .map(response => response.json().data.results[0] as Hero)
+                            .catch(ErrorHandler.handleError)
+                            .pipe(
+                                tap(y => console.log(y))
+                            );
+            }    
 
      /* gera um timestamp aleatório entre um min e um máximo  */
      

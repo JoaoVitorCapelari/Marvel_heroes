@@ -4,7 +4,6 @@
       <tr>
         <th>ID</th>
         <th>Hero Name</th>
-        <th>Description</th>
         <th>Modified</th>
       </tr>
     </thead>
@@ -12,7 +11,6 @@
       <tr *ngFor="let hero of heroes">
         <td>{{hero.id}}</td>
         <td><a [routerLink]="['/hero-detail', hero.id]">{{hero.name}}</a></td>
-        <td>{{hero.description}}</td>
         <td>{{hero.modified}}</td>
       </tr>
     </tbody>

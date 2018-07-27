@@ -4,7 +4,13 @@ export interface Hero {
     name: string
     description: string
     modified: string
-    image: string
-    comics: string
+    comics: {
+        available: number,
+        collectionURI: string
+    }
+    thumbnail: {
+        path: string,
+        extension: string
+    }
 
 }
