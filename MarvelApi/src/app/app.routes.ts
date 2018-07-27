@@ -4,5 +4,5 @@ import { HeroDetailComponent } from './hero-detail/hero-detail.component';
 
 export const ROUTES: Routes = [
     {path: '', component: TableComponent},
-    {path: 'hero-detail', component: HeroDetailComponent},
+    {path: 'hero-detail/:id', component: HeroDetailComponent},
 ]

@@ -2,11 +2,13 @@ import { Hero } from "./hero.model";
 import { MARVEL_API } from "../app.api";
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
-import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorHandler } from "../app.error-handler";
 
 import { Observable } from 'rxjs/observable';
 import { tap } from 'rxjs/operators';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+
 
 
 /* para uma classe de serviço receber um outro serviço via injeção de dependencia precisa marca-la com o decorator @injectable */
@@ -21,7 +23,7 @@ export class heroService {
      //  return Promise.resolve(this.heroes);
      //}
 
-       getHeroes(): Observable<Hero[]> { 
+       getHeroes(id?): Observable<Hero[]> { 
             /*Utilizando o serviço http com get
             o tipo Observable response não é compativel com o tipo response array de Hero, por isso preciso
             mapear e converter para o tipo json, utilizando o operador map, toda requisição feita vai retornar 
@@ -30,9 +32,11 @@ export class heroService {
             pipe(tap( x => console.log(x))) funciona como um subscribe, mas ele não completa, somente simula uma subscription  */
            return this.http.get(MARVEL_API)
                .map(response => response.json().data.results as Hero[])
+               .catch(ErrorHandler.handleError)
                .pipe(
                    tap(x => console.log(x))
                 );
+                
             }
 
      /* gera um timestamp aleatório entre um min e um máximo  */

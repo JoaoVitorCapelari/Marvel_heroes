@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Hero } from './hero.model';
 import { heroService } from './hero.service';
 
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -29,11 +30,13 @@ export class TableComponent implements OnInit {
     //  this.heroes = heroes;
     // });
 
+    /* Get lista de herois */
      this.heroService.getHeroes()
       .subscribe(data => {
         this.heroes = data;
       }, error => {console.log(error)});
     }
+
 }
 
 
