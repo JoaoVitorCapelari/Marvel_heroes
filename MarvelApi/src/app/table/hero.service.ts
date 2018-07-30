@@ -23,7 +23,7 @@ export class heroService {
      //  return Promise.resolve(this.heroes);
      //}
 
-       getHeroes(): Observable<Hero[]> { 
+       getHeroes(offset: string): Observable<Hero[]> { 
             /*Utilizando o serviço http com get
             o tipo Observable response não é compativel com o tipo response array de Hero, por isso preciso
             mapear e converter para o tipo json, utilizando o operador map, toda requisição feita vai retornar 
@@ -31,7 +31,7 @@ export class heroService {
             A chamada http ainda não foi feita, vai ser feita quando eu fizer o subscribe no componente 
             pipe(tap( x => console.log(x))) funciona como um subscribe, mas ele não completa, somente simula uma subscription  
             Operador catch serve para tratamento de erro, que está em outra classe/arquivo */
-           return this.http.get(MARVEL_API)
+           return this.http.get(`${MARVEL_API}?offset=${offset}&${apiKeyHashTs}`) 
                .map(response => response.json().data.results as Hero[])
                .catch(ErrorHandler.handleError)
                .pipe(
@@ -40,7 +40,7 @@ export class heroService {
             }
 
         getHeroById(id: number): Observable<Hero>{
-            return this.http.get(`${MARVEL_API_HERO}/${id}${apiKeyHashTs}`)
+            return this.http.get(`${MARVEL_API}/${id}?${apiKeyHashTs}`)
                             .map(response => response.json().data.results[0] as Hero)
                             .catch(ErrorHandler.handleError)
                             .pipe(
@@ -73,3 +73,4 @@ export class heroService {
    RXJS, o objeto principal é Observable
    Observables continuam disparando eventos até que sejam explicitamente fechados => Múltiplos Eventos
    Promises são consideradas resolvidas depois do primeiro evento */
+

@@ -31,7 +31,7 @@ export class TableComponent implements OnInit {
     // });
 
     /* Get lista de herois */
-     this.heroService.getHeroes()
+     this.heroService.getHeroes('0')
       .subscribe(data => {
         this.heroes = data;
       }, error => {console.log(error)});
