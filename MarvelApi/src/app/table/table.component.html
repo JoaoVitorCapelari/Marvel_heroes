@@ -8,7 +8,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let hero of heroes">
+      <tr *ngFor="let hero of (hero$ | async)">
         <td>{{hero.id}}</td>
         <td><a [routerLink]="['/hero-detail', hero.id]">{{hero.name}}</a></td>
         <td>{{hero.modified}}</td>

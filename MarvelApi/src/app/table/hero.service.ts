@@ -1,13 +1,16 @@
 import { Hero } from "./hero.model";
-import { MARVEL_API, MARVEL_API_HERO, apiKeyHashTs } from "../app.api";
+import { MARVEL_API, apiKeyHashTs } from "../app.api";
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
 import { ErrorHandler } from "../app.error-handler";
 
 import { Observable } from 'rxjs/observable';
-import { tap } from 'rxjs/operators';
+import { tap, share, exhaustMap, mergeMap, startWith  } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import { concat } from "../../../node_modules/rxjs/observable/concat";
+import { merge } from "../../../node_modules/rxjs/operator/merge";
 
 
 
@@ -23,21 +26,35 @@ export class heroService {
      //  return Promise.resolve(this.heroes);
      //}
 
-       getHeroes(offset: string): Observable<Hero[]> { 
+   
+    offset =-20;
+       getHeroes(): Observable<Hero[]> { 
             /*Utilizando o serviço http com get
             o tipo Observable response não é compativel com o tipo response array de Hero, por isso preciso
             mapear e converter para o tipo json, utilizando o operador map, toda requisição feita vai retornar 
             um tipo response que representa a resposta crua, mas preciso do obejto json.
             A chamada http ainda não foi feita, vai ser feita quando eu fizer o subscribe no componente 
             pipe(tap( x => console.log(x))) funciona como um subscribe, mas ele não completa, somente simula uma subscription  
-            Operador catch serve para tratamento de erro, que está em outra classe/arquivo */
-           return this.http.get(`${MARVEL_API}?offset=${offset}&${apiKeyHashTs}`) 
+            Operador catch serve para tratamento de erro, que está em outra classe/arquivo 
+            Share do rxjs */
+
+         this.offset+=20; 
+           return this.http.get(`${MARVEL_API}?offset=${this.offset}&${apiKeyHashTs}`) 
                .map(response => response.json().data.results as Hero[])
                .catch(ErrorHandler.handleError)
                .pipe(
-                   tap(x => console.log(x))
+                   tap(x => console.log(x)),
+                   share(),
                 );
+                
             }
+
+        refresh$ = new BehaviorSubject([]);
+        
+        heroes$: Observable<Hero[]> = this.refresh$.pipe(
+            startWith([]),
+            exhaustMap(() => this.getHeroes())
+        );
 
         getHeroById(id: number): Observable<Hero>{
             return this.http.get(`${MARVEL_API}/${id}?${apiKeyHashTs}`)
