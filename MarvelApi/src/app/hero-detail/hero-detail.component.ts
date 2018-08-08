@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Hero } from '../table/hero.model'
-import { heroService } from '../table/hero.service';
+import { HeroService } from '../table/hero.service';
 import { ActivatedRoute, ParamMap } from '../../../node_modules/@angular/router';
 import { switchMap } from '../../../node_modules/rxjs/operators';
 import { ErrorHandler } from '../app.error-handler';
@@ -14,7 +14,7 @@ export class HeroDetailComponent implements OnInit {
 
   hero: Hero;
 
-  constructor(private heroService: heroService, private route: ActivatedRoute) { }
+  constructor(private heroService: HeroService, private route: ActivatedRoute) { }
 
   ngOnInit() {
 
@@ -26,7 +26,6 @@ export class HeroDetailComponent implements OnInit {
     .pipe(
       switchMap((params: ParamMap) => this.heroService.getHeroById(+params.get('id')))
     )
-    .catch(ErrorHandler.handleError)
     .subscribe(
       data => this.hero = data
     );

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Hero } from './hero.model';
-import { heroService } from './hero.service';
-import { timer } from '../../../node_modules/rxjs/observable/timer';
-import { Subscription } from 'rxjs';
+import { HeroService } from './hero.service';
+
+import { Subscription, timer } from 'rxjs';
 
 
 @Component({
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 })
 export class TableComponent implements OnInit, OnDestroy {
 
-  constructor(private heroService: heroService) {}
+  constructor(private heroService: HeroService) {}
 
   /* propriedade chamada hero do tipo Hero que é meu model que representa o dado do tipo hero, segundo a API.
      decorator @Input permite com que outros componentes possam passar o meu hero para
@@ -45,7 +45,7 @@ export class TableComponent implements OnInit, OnDestroy {
     //     this.heroes = data;
     //   }, error => {console.log(error)});
 
-      this.subscription = this.refreshTimer$.subscribe(this.heroService.refresh$);
+      this.subscription = this.refreshTimer$.subscribe(() => this.heroService.refresh$.next(null));
     }
 
   ngOnDestroy() {
