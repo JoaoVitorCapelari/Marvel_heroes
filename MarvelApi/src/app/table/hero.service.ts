@@ -1,76 +1,67 @@
-import { Hero } from "./hero.model";
-import { MARVEL_API, apiKeyHashTs } from "../app.api";
-import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
-import { ErrorHandler } from "../app.error-handler";
-
-import { Observable } from 'rxjs/observable';
-import { tap, share, exhaustMap, mergeMap, startWith  } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import { concat } from "../../../node_modules/rxjs/observable/concat";
-import { merge } from "../../../node_modules/rxjs/operator/merge";
-
+import { Hero } from './hero.model';
+import { MARVEL_API, apiKeyHashTs } from '../app.api';
+import { Injectable, Output } from '@angular/core';
+import { Http } from '@angular/http';
+import { tap, share, exhaustMap, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 
 /* para uma classe de serviço receber um outro serviço via injeção de dependencia precisa marca-la com o decorator @injectable */
 @Injectable()
-export class heroService {
+export class HeroService {
 
     constructor(private http: Http) {}
 
-    /* Utilizando promises ao invés de Observable */
+    cache: Hero[] = [];
+    @Output()
+    loading: boolean = false;
 
-     //getHeroes(): Promise<Hero[]> {
-     //  return Promise.resolve(this.heroes);
-     //}
+    offset = -20;
+    refresh$: BehaviorSubject<Hero[]> = new BehaviorSubject([]);
+    heroes$: Observable<Hero[]> = this.refresh$.pipe(
+        exhaustMap(() => this.getHeroes())
+    );
+    
+    getHeroes(): Observable<Hero[]> {
+        this.offset += 20;
+        return this.http.get(`${MARVEL_API}?offset=${this.offset}&${apiKeyHashTs}`)
+        .pipe(
+                      map(response => response.json().data.results as Hero[]),
+                      tap((h) => this.cache = this.cache.concat(h)),
+                      map(() => this.cache),
+                     share(),
+                    );
+                }
 
-   
-    offset =-20;
-       getHeroes(): Observable<Hero[]> { 
-            /*Utilizando o serviço http com get
-            o tipo Observable response não é compativel com o tipo response array de Hero, por isso preciso
-            mapear e converter para o tipo json, utilizando o operador map, toda requisição feita vai retornar 
-            um tipo response que representa a resposta crua, mas preciso do obejto json.
-            A chamada http ainda não foi feita, vai ser feita quando eu fizer o subscribe no componente 
-            pipe(tap( x => console.log(x))) funciona como um subscribe, mas ele não completa, somente simula uma subscription  
-            Operador catch serve para tratamento de erro, que está em outra classe/arquivo 
-            Share do rxjs */
-
-         this.offset+=20; 
-           return this.http.get(`${MARVEL_API}?offset=${this.offset}&${apiKeyHashTs}`) 
-               .map(response => response.json().data.results as Hero[])
-               .catch(ErrorHandler.handleError)
-               .pipe(
-                   tap(x => console.log(x)),
-                   share(),
-                );
-                
-            }
-
-        refresh$ = new BehaviorSubject([]);
-        
-        heroes$: Observable<Hero[]> = this.refresh$.pipe(
-            startWith([]),
-            exhaustMap(() => this.getHeroes())
+    getHeroById(id: number): Observable<Hero>{
+        return this.http.get(`${MARVEL_API}/${id}?${apiKeyHashTs}`)
+        .pipe(
+            map(response => response.json().data.results[0] as Hero),
+            tap(y => console.log(y))
         );
-
-        getHeroById(id: number): Observable<Hero>{
-            return this.http.get(`${MARVEL_API}/${id}?${apiKeyHashTs}`)
-                            .map(response => response.json().data.results[0] as Hero)
-                            .catch(ErrorHandler.handleError)
-                            .pipe(
-                                tap(y => console.log(y))
-                            );
-            }    
-
-     /* gera um timestamp aleatório entre um min e um máximo  */
-     
-     //  tsRandom(min: number, max: number) {
-     //   return Math.random() * (max - min) + min;
-     //  } 
+    }
+    
 }
+            
+/* Utilizando promises ao invés de Observable */
+
+//getHeroes(): Promise<Hero[]> {
+//  return Promise.resolve(this.heroes);
+//}
+
+/*Utilizando o serviço http com get
+o tipo Observable response não é compativel com o tipo response array de Hero, por isso preciso
+mapear e converter para o tipo json, utilizando o operador map, toda requisição feita vai retornar 
+um tipo response que representa a resposta crua, mas preciso do obejto json.
+A chamada http ainda não foi feita, vai ser feita quando eu fizer o subscribe no componente 
+pipe(tap( x => console.log(x))) funciona como um subscribe, mas ele não completa, somente simula uma subscription  
+Operador catch serve para tratamento de erro, que está em outra classe/arquivo 
+Share do rxjs */
+
+/* gera um timestamp aleatório entre um min e um máximo  */
+//  tsRandom(min: number, max: number) {
+//   return Math.random() * (max - min) + min;
+//  }
 
 /* serviço é usado para encapsular o acesso a API de back-end
    são 3 os escopos que posso usar para declarar um serviço
@@ -90,4 +81,3 @@ export class heroService {
    RXJS, o objeto principal é Observable
    Observables continuam disparando eventos até que sejam explicitamente fechados => Múltiplos Eventos
    Promises são consideradas resolvidas depois do primeiro evento */
-
